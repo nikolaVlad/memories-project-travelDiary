@@ -6,6 +6,7 @@ export default makeStyles({
     paddingTop: '56.25%',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backgroundBlendMode: 'darken',
+    position: 'relative'
   },
   border: {
     border: 'solid',
@@ -53,4 +54,11 @@ export default makeStyles({
     display: 'block',
     textAlign: 'initial',
   },
+  test:
+  {
+    position : 'absolute',
+    right: '5%',
+    top:'25px',
+    color:'white'
+  }
 });
