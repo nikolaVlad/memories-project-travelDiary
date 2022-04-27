@@ -49,11 +49,12 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
-      role: 'member'
+      role: 'member',
+      followings : []
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
-      expiresIn: "1h",
+      expiresIn: "3h",
     });
 
     res.status(200).json({ result, token });
