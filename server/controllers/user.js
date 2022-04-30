@@ -82,7 +82,6 @@ export const changeFollow = async (req, res) => {
   const { followingUserId } = req.body;
 
   const user = await User.findById(userId);
-  console.log('ovdeka');
 
   const index = user.followings.findIndex((id) => id === String(followingUserId));
 
