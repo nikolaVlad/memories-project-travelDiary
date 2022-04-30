@@ -68,7 +68,10 @@ export const getFollowings = async (req, res) => {
   const { userId } = req;
   try {
     const user = await User.findById(userId)
-    console.log(user);
+    if (!user) {
+      return res.status(401).send({ message: 'Error: User not exist.' })
+    }
+
     res.status(200).send(user?.followings || []);
   } catch (err) {
     res.status(404).json({ message: err.mesage });
@@ -83,16 +86,24 @@ export const changeFollow = async (req, res) => {
 
   const user = await User.findById(userId);
 
-  const index = user.followings.findIndex((id) => id === String(followingUserId));
+  // Izvuko sam user-a koga pratimo
+  const followingUser = await User.findById(followingUserId);
+
+  const indexes = user.followings.map(user => String(user._id));
+
+  const index = indexes.findIndex((id) => id === String(followingUserId));
 
   if (index === -1) {
     // Follow user
     console.log('Followed user.')
-    user.followings.push(followingUserId);
+    const { _id, name, email } = followingUser
+    user.followings.push({ _id, name, email });
   } else {
     // Unfollow user
-    console.log('Unfollow user.')
-    user.followings = user.followings.filter((id) => id !== String(followingUserId));
+    console.log('Unfollowed user.')
+    user.followings = user.followings.filter((user) => {
+      user._id !== String(followingUserId)
+    });
   }
 
   const updatedUser = await User.findByIdAndUpdate(userId, user, {
