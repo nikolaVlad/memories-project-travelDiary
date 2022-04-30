@@ -1,7 +1,6 @@
 import { START_LOADING_USERS, END_LOADING_USERS, FETCH_FOLLOWINGS, UPDATE_FOLLOWINGS } from "../constants/actionTypes";
 
 const usersReducer = (state = { isLoading: true, followings: [] }, action) => {
-  console.log('userReducer', action);
   switch (action.type) {
     case START_LOADING_USERS:
       return { ...state, isLoading: true };

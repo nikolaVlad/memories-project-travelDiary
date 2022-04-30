@@ -8,6 +8,8 @@ import PostDetails from './components/PostDetails/PostDetails';
 import UserPosts from './UserPosts/UserPosts';
 import { useDispatch } from 'react-redux';
 import { getFollowings } from './actions/users';
+import Profile from './components/Profile';
+import { getPosts } from './actions/posts';
 
 
 
@@ -16,6 +18,7 @@ const onMountApp = (dispatch) => {
   console.log('-App mounted-');
   console.log('Get all following users.')
   dispatch(getFollowings());
+  dispatch(getPosts())
 }
 
 const App = () => {
@@ -38,6 +41,7 @@ const App = () => {
           <Route path="/posts/:id" exact component={PostDetails} />
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
           <Route path="/posts/userPosts/:id" exact component={UserPosts} />
+          <Route path="/profile" exact component={Profile} />
         </Switch>
       </Container>
     </BrowserRouter>
