@@ -50,15 +50,55 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
       role: 'member',
-      followings : []
+      followings: []
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
       expiresIn: "3h",
     });
 
+
     res.status(200).json({ result, token });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const getFollowings = async (req, res) => {
+  const { userId } = req;
+  try {
+    const user = await User.findById(userId)
+    console.log(user);
+    res.status(200).send(user?.followings || []);
+  } catch (err) {
+    res.status(404).json({ message: err.mesage });
+  }
+}
+
+// #point
+export const changeFollow = async (req, res) => {
+  // Login user id
+  const { userId } = req;
+  const { followingUserId } = req.body;
+
+  const user = await User.findById(userId);
+  console.log('ovdeka');
+
+  const index = user.followings.findIndex((id) => id === String(followingUserId));
+
+  if (index === -1) {
+    // Follow user
+    console.log('Followed user.')
+    user.followings.push(followingUserId);
+  } else {
+    // Unfollow user
+    console.log('Unfollow user.')
+    user.followings = user.followings.filter((id) => id !== String(followingUserId));
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(userId, user, {
+    new: true,
+  });
+
+  res.status(200).send(updatedUser);
+}
