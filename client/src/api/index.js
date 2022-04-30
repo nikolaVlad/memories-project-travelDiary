@@ -32,4 +32,5 @@ export const signin = (formData) => API.post('/user/signin', formData);
 export const signup = (formData) => API.post('/user/signup', formData);
 
 export const fetchFollowings = () => API.get('/user/followings');
+export const fetchFollowers = () => API.get('/user/followers');
 export const changeFollow = (followingUserId) => API.patch('/user/changeFollow', { followingUserId });

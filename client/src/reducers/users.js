@@ -1,6 +1,6 @@
-import { START_LOADING_USERS, END_LOADING_USERS, FETCH_FOLLOWINGS, UPDATE_FOLLOWINGS } from "../constants/actionTypes";
+import { START_LOADING_USERS, END_LOADING_USERS, FETCH_FOLLOWINGS, UPDATE_FOLLOWINGS, FETCH_FOLLOWERS, UPDATE_FOLLOWERS } from "../constants/actionTypes";
 
-const usersReducer = (state = { isLoading: true, followings: [] }, action) => {
+const usersReducer = (state = { isLoading: true, followings: [], followers: [] }, action) => {
   switch (action.type) {
     case START_LOADING_USERS:
       return { ...state, isLoading: true };
@@ -14,7 +14,19 @@ const usersReducer = (state = { isLoading: true, followings: [] }, action) => {
     case UPDATE_FOLLOWINGS:
       return {
         ...state,
-        followings: action.payload.followings
+        followings: action.payload.followings,
+      }
+    case FETCH_FOLLOWERS:
+      return {
+        ...state,
+        followers: action.payload.data
+      }
+    case UPDATE_FOLLOWERS:
+      {
+        return {
+          ...state,
+          followers: action.payload.followers
+        }
       }
     default:
       return state;
