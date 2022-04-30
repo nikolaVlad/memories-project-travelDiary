@@ -50,7 +50,8 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
       role: 'member',
-      followings: []
+      followings: [],
+      followers: []
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
@@ -78,7 +79,19 @@ export const getFollowings = async (req, res) => {
   }
 }
 
-// #point
+export const getFollowers = async (req, res) => {
+  const { userId } = req;
+  try {
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(401).send({ message: 'Error: User not exist.' })
+    }
+    res.status(200).send(user?.followers || []);
+  } catch (err) {
+    res.status(404).json({ message: err.mesage });
+  }
+}
+
 export const changeFollow = async (req, res) => {
   // Login user id
   const { userId } = req;
@@ -97,18 +110,31 @@ export const changeFollow = async (req, res) => {
     // Follow user
     console.log('Followed user.')
     const { _id, name, email } = followingUser
+    // Push to followings
     user.followings.push({ _id, name, email });
+    // Push to followers - on following user
+    followingUser.followers.push({ _id: user._id, name: user.name, email: user.email })
   } else {
     // Unfollow user
-    console.log('Unfollowed user.')
+    console.log('Unfollowers user.')
+    // Pop from followings
     user.followings = user.followings.filter((user) => {
       user._id !== String(followingUserId)
     });
+    // Pop from followers - on followings user
+    followingUser.followers = followingUser.followers.filter((user) => {
+      user._id !== String(userId);
+    })
+
   }
 
   const updatedUser = await User.findByIdAndUpdate(userId, user, {
     new: true,
   });
+
+  const updatedFollowingUser = await User.findByIdAndUpdate(followingUserId, followingUser, {
+    new: true
+  })
 
   res.status(200).send(updatedUser);
 }
