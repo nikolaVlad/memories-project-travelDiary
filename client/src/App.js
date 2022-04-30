@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import Navbar from './components/Navbar/Navbar';
@@ -6,9 +6,26 @@ import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
 import PostDetails from './components/PostDetails/PostDetails';
 import UserPosts from './UserPosts/UserPosts';
+import { useDispatch } from 'react-redux';
+import { getFollowings } from './actions/users';
+
+
+
+
+const onMountApp = (dispatch) => {
+  console.log('-App mounted-');
+  console.log('Get all following users.')
+  dispatch(getFollowings());
+}
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    onMountApp(dispatch);
+  })
 
   return (
     <BrowserRouter>

@@ -30,28 +30,30 @@ const UserPosts = () => {
 
   useEffect(() => {
     getPostsFromApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getPostsFromApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
     <>
-    <h2 className={classes.root}> <span style = {{color : 'blueviolet'}}> {posts && posts[0].name} </span> `s posts</h2>
-   
+      <h2 className={classes.root}> <span style={{ color: 'blueviolet' }}> {posts && posts[0].name} </span> `s posts</h2>
 
 
-    <Grid  container alignItems="stretch" spacing={3}>
-      {posts &&
-        posts.map((post) => {
-          return (
-            <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-              <Post post={post} noActionsVar />
-            </Grid>
-          );
-        })}
-    </Grid>
+
+      <Grid container alignItems="stretch" spacing={3}>
+        {posts &&
+          posts.map((post) => {
+            return (
+              <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
+                <Post post={post} noActionsVar />
+              </Grid>
+            );
+          })}
+      </Grid>
 
     </>
   );

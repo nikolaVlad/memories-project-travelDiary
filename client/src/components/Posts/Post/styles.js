@@ -12,6 +12,7 @@ export default makeStyles({
   },
   fullHeightCard: {
     height: '100%',
+
   },
   card: {
     display: 'flex',
@@ -20,6 +21,7 @@ export default makeStyles({
     borderRadius: '15px',
     height: '100%',
     position: 'relative',
+
   },
   overlay: {
     position: 'absolute',
@@ -43,6 +45,7 @@ export default makeStyles({
   },
   title: {
     padding: '0 16px',
+
   },
   cardActions: {
     padding: '0 16px 8px 16px',
@@ -53,4 +56,13 @@ export default makeStyles({
     display: 'block',
     textAlign: 'initial',
   },
+  followButton: {
+    position: 'absolute',
+    top: '8%',
+    right: '5%',
+    color: 'white',
+    border: '2px solid gray',
+    padding: '3px',
+    fontSize: '12px'
+  }
 });

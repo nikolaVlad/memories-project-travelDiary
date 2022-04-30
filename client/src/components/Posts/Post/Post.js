@@ -4,15 +4,15 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
-import InfoIcon from '@material-ui/icons/Info';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 
-import { getPost, likePost, deletePost } from '../../../actions/posts';
+import { likePost, deletePost } from '../../../actions/posts';
 import useStyles from './styles';
 
-const Post = ({ post, setCurrentId, noActionsVar }) => {
+
+const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -42,8 +42,6 @@ const Post = ({ post, setCurrentId, noActionsVar }) => {
   };
 
   const openPost = (e) => {
-    // dispatch(getPost(post._id, history));
-
     history.push(`/posts/${post._id}`);
   };
 
@@ -54,7 +52,17 @@ const Post = ({ post, setCurrentId, noActionsVar }) => {
           className={classes.media}
           image={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'}
           title={post.title}
-        />
+        >
+          {user && user.result._id !== post.creator &&
+            <Typography style={{ background: `${isFollowing ? '' : 'gray'}` }} variant="body2" className={classes.followButton} onClick={(e) => {
+              e.stopPropagation()
+              onChangeFollow()
+            }}>
+              {isFollowing ? ' Unfollow' : '+ Follow'}
+            </Typography>
+          }
+        </CardMedia>
+
         <div className={classes.overlay}>
           <Typography variant="h6">{post.name}</Typography>
           <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
@@ -63,8 +71,10 @@ const Post = ({ post, setCurrentId, noActionsVar }) => {
           <div className={classes.overlay2} name="edit">
             <Button
               onClick={(e) => {
+
                 e.stopPropagation();
                 setCurrentId(post._id);
+
               }}
               style={{ color: 'white' }}
               size="small"
@@ -74,8 +84,8 @@ const Post = ({ post, setCurrentId, noActionsVar }) => {
           </div>
         )}
 
-        <Typography  className={classes.title} variant="h6" color="black"  >
-            {post.category}
+        <Typography className={classes.title} variant="h6"  >
+          {post.category}
         </Typography>
 
         <div className={classes.details}>
@@ -92,19 +102,20 @@ const Post = ({ post, setCurrentId, noActionsVar }) => {
           </Typography>
         </CardContent>
       </ButtonBase>
-      {!noActionsVar && 
-      <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
-          <Likes />
-        </Button>
-        {(user?.result?._id === post?.creator) && (
-          <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
-            <DeleteIcon fontSize="small" /> &nbsp; Delete
+      {
+        !noActionsVar &&
+        <CardActions className={classes.cardActions}>
+          <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+            <Likes />
           </Button>
-        )}
-      </CardActions>
-    }
-    </Card>
+          {(user?.result?._id === post?.creator) && (
+            <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
+              <DeleteIcon fontSize="small" /> &nbsp; Delete
+            </Button>
+          )}
+        </CardActions>
+      }
+    </Card >
   );
 };
 

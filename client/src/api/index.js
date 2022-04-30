@@ -10,10 +10,10 @@ API.interceptors.request.use((req) => {
 })
 
 // Comments
-export const createComment = (userName, userId, postId, comment) => API.post('/comments',{userName,userId,postId,comment})
+export const createComment = (userName, userId, postId, comment) => API.post('/comments', { userName, userId, postId, comment })
 export const getComentsForPost = (postId) => API.get(`/comments?postId=${postId}`);
 export const deleteComment = (id) => API.delete(`/comments/${id}`);
-export const updateComment = (id, updateComment) => API.patch(`/comments/${id}`, {updateComment});
+export const updateComment = (id, updateComment) => API.patch(`/comments/${id}`, { updateComment });
 
 
 
@@ -30,3 +30,6 @@ export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 
 export const signin = (formData) => API.post('/user/signin', formData);
 export const signup = (formData) => API.post('/user/signup', formData);
+
+export const fetchFollowings = () => API.get('/user/followings');
+export const changeFollow = (followingUserId) => API.patch('/user/changeFollow', { followingUserId });

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPostsBySearch } from '../../actions/posts';
-import { Container, Grow, Grid, Paper, AppBar, TextField, Button , MenuItem} from '@material-ui/core';
+import { Container, Grow, Grid, Paper, AppBar, TextField, Button, MenuItem } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
@@ -25,14 +25,14 @@ const Home = () => {
 
   const [search, setSearch] = useState('');
   const [tags, setTags] = useState([]);
-  const [categorySearch , setCategorySearch] = useState('All');
+  const [categorySearch, setCategorySearch] = useState('All');
   const history = useHistory();
 
 
   const searchPost = () => {
-     
+
     if (search.trim() || tags || (categorySearch && categorySearch !== 'All')) {
-      dispatch(getPostsBySearch({ search, tags: tags.join(','), category : categorySearch}));
+      dispatch(getPostsBySearch({ search, tags: tags.join(','), category: categorySearch }));
       history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}&category=${categorySearch}`);
     } else {
       history.push('#');
