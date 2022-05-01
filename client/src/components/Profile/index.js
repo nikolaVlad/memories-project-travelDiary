@@ -25,13 +25,30 @@ const Profile = () => {
   // Right menu items
   const [selectedMenuItem, setSelectedMenuItem] = useState('');
 
+  const filterFunctionWithCreator = (posts) => {
+    let res = posts;
+    const creator = selectedMenuItem._id;
+    if (creator) {
+      res = res.filter((post) => post.creator === creator);
+    }
+
+    return res;
+  }
+
+  // #point: Ovo cu koristiti kasnije.
+  const filterFunctionWithPlace = (posts) => {
+    return posts;
+  }
+
   const menuItems = [{
     name: 'Followings',
-    value: followings
+    value: followings,
+    filterFunction: filterFunctionWithCreator
   },
   {
     name: 'Followers',
-    value: followers
+    value: followers,
+    filterFunction: filterFunctionWithCreator
   },
   {
     name: 'Visited places',
@@ -68,10 +85,10 @@ const Profile = () => {
             })}
           </div>
         </div>
-
+        <div>{selectedMenuItem.cretor}</div>
       </div>
       <div className="posts">
-        <Posts />
+        <Posts filterFunction={menuItems[menuIndex].filterFunction} />
       </div>
     </div>
   );

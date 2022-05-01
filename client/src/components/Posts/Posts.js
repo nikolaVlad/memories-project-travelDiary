@@ -6,7 +6,7 @@ import Post from './Post/Post';
 import { useDispatch } from 'react-redux';
 import { changeFollow } from '../../actions/users';
 
-const Posts = ({ setCurrentId }) => {
+const Posts = ({ setCurrentId, filterFunction }) => {
   const classes = useStyles();
   const { posts, isLoading } = useSelector((state) => state.posts);
   const { followings } = useSelector((state) => state.users);
@@ -15,13 +15,16 @@ const Posts = ({ setCurrentId }) => {
 
     dispatch(changeFollow(followingUserId));
   }
-  if (!posts?.length && !isLoading) return 'No posts';
+
+  const filteredPosts = filterFunction ? filterFunction(posts) : posts;
+
+  if (!filteredPosts?.length && !isLoading) return 'No posts';
 
   return isLoading ? (
     <CircularProgress />
   ) : (
     <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-      {posts?.map((post) => (
+      {filteredPosts?.map((post) => (
         <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
           <Post post={post} setCurrentId={setCurrentId} onChangeFollow={() => onChangeFollow(post.creator)} isFollowing={followings.map(user => user._id).includes(post.creator)} />
         </Grid>
