@@ -24,6 +24,7 @@
     .item {
       padding: 20px;
       cursor: pointer;
+      display: flex;
 
       &:hover {
         background-color: rgba(72, 72, 72, 0.043);
@@ -52,17 +53,19 @@
       padding: 10px;
       cursor: pointer;
 
-      &:hover {
-        color: rgb(0, 101, 147);
-      }
+      .selectedMenuItem {
+        &:hover {
+          color: rgb(0, 101, 147);
+        }
 
-      &.active {
-        color: rgb(0, 152, 223);
+        &.active {
+          color: rgb(0, 152, 223);
+        }
       }
     }
-    .noResutls {
+    .noResults {
       padding-top: 30px;
-      color: gray;
+      color: rgba(128, 128, 128, 0.626);
     }
   }
 

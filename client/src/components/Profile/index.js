@@ -20,50 +20,30 @@ const Profile = () => {
     dispatch(getFollowings());
   }, [])
 
-  useEffect(() => {
-    setRightMenuItems(followers);
-  }, [followers])
+  const [menuIndex, setMenuIndex] = useState(0);
 
-  useEffect(() => {
-    console.log('desi se');
-  }, [followings])
+  // Right menu items
+  const [selectedMenuItem, setSelectedMenuItem] = useState('');
 
-  // #point: Kad sve popravim ovde treba kao useState inicijalno da stoji 0 index
-  const [leftMenuItem, setLeftMenuItem] = useState(0);
-
-  // Potreban niz items-a koji ce biti postavljeni tu
-  const [rightMenuItem, setRightMenuItem] = useState();
-
-  const leftMenuItems = ['Followers', 'Followings', 'Visited Places', 'Places to visit'];
-
-  const [rightMenuItems, setRightMenuItems] = useState([]);
-
-
-  const changeLeftMenuItem = (index) => {
-    setLeftMenuItem(index);
-    setRightMenuItem('');
-    // Get followers
-    if (index === 0) {
-      setRightMenuItems(followers);
-    }
-
-    // Get followings
-    if (index === 1) {
-      setRightMenuItems(followings);
-    }
-
-    // Get visited places
-    if (index === 2) {
-    }
-
-    // Get places to visit
-    if (index === 3) {
-    }
-  };
-
-  const changeRightMenuItem = (value) => {
-    setRightMenuItem(value);
+  const menuItems = [{
+    name: 'Followings',
+    value: followings
+  },
+  {
+    name: 'Followers',
+    value: followers
+  },
+  {
+    name: 'Visited places',
+    value: []
+  },
+  {
+    name: 'Places to visit',
+    value: []
   }
+  ]
+
+
 
   if (!user) {
     return <Redirect to='/auth' />
@@ -73,32 +53,22 @@ const Profile = () => {
     <div className="wrapper">
       <div className="menu">
         <div className="items">
-          {!isLoading ? leftMenuItems.map((item, index) => {
-            return (
-              <div key={index} onClick={() => changeLeftMenuItem(index)} className={`item ${index === leftMenuItem ? 'active' : ''}`}>
-                {item}
-              </div>
-            );
-          }) :
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <CircularProgress style={{ padding: '30px' }} size="1em" />
-              <CircularProgress style={{ padding: '30px' }} size="1em" />
-              <CircularProgress style={{ padding: '30px' }} size="1em" />
-              <CircularProgress style={{ padding: '30px' }} size="1em" />
-            </div>
-          }
+          {menuItems.map((item, index) => {
+            return (<div className={`item ${menuIndex === index ? 'active' : ''}`} onClick={() => {
+              setMenuIndex(index)
+              setSelectedMenuItem('');
+            }
+            }>{item.name} {isLoading && <CircularProgress size={'1rem'} />}</div>)
+          })}
+        </div>
+        <div className='selectedMenu'>
+          <div className='selectedMenuItems'>
+            {isLoading ? 'loading...' : menuItems[menuIndex].value.length < 1 ? <div className='noResults'>No results</div> : menuItems[menuIndex].value.map((item) => {
+              return <div onClick={() => setSelectedMenuItem(item)} className={`selectedMenuItem ${item === selectedMenuItem ? 'active' : ''}`}>{item.name}</div>
+            })}
+          </div>
         </div>
 
-        <div className="selectedMenu">
-          {isLoading ? <div>Loading...</div> : rightMenuItems.length > 0 ? rightMenuItems?.map((item) => {
-            return <div key={item._id} onClick={() => changeRightMenuItem(item.name)} className={`selectedMenuItems ${item.name === rightMenuItem ? 'active' : ''}`}>
-              {item.name}
-            </div>;
-          }) :
-            <div className='noResutls'>
-              No results
-            </div>}
-        </div>
       </div>
       <div className="posts">
         <Posts />
