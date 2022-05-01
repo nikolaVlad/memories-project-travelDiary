@@ -6,6 +6,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import s from './styles';
 import Input from './Input';
 import { signin, signup } from '../../actions/auth';
+import { getFollowers, getFollowings } from '../../actions/users';
 
 const initialState = {
   firstName: '',
@@ -23,7 +24,7 @@ const Auth = () => {
   const history = useHistory();
 
   const handleSubmit = (e) => {
- 
+
     e.preventDefault();
     localStorage.clear();
 

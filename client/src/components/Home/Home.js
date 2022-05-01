@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPostsBySearch } from '../../actions/posts';
 import { Container, Grow, Grid, Paper, AppBar, TextField, Button, MenuItem } from '@material-ui/core';
@@ -27,7 +27,6 @@ const Home = () => {
   const [tags, setTags] = useState([]);
   const [categorySearch, setCategorySearch] = useState('All');
   const history = useHistory();
-
 
   const searchPost = () => {
 

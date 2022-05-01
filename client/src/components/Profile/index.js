@@ -2,9 +2,8 @@ import { CircularProgress } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import { getFollowers } from '../../actions/users';
+import { getFollowers, getFollowings } from '../../actions/users';
 
 import Posts from '../Posts/Posts';
 import './styles.scss';
@@ -14,12 +13,20 @@ const Profile = () => {
   const { followers } = useSelector(state => state.users);
   const { isLoading } = useSelector(state => state.users);
   const user = JSON.parse(localStorage.getItem('profile'));
-  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getFollowers());
+    dispatch(getFollowings());
   }, [])
+
+  useEffect(() => {
+    setRightMenuItems(followers);
+  }, [followers])
+
+  useEffect(() => {
+    console.log('desi se');
+  }, [followings])
 
   // #point: Kad sve popravim ovde treba kao useState inicijalno da stoji 0 index
   const [leftMenuItem, setLeftMenuItem] = useState(0);
@@ -31,13 +38,10 @@ const Profile = () => {
 
   const [rightMenuItems, setRightMenuItems] = useState([]);
 
-  useEffect(() => {
-    changeLeftMenuItem(0);
-  }, []);
 
   const changeLeftMenuItem = (index) => {
     setLeftMenuItem(index);
-
+    setRightMenuItem('');
     // Get followers
     if (index === 0) {
       setRightMenuItems(followers);
@@ -56,6 +60,10 @@ const Profile = () => {
     if (index === 3) {
     }
   };
+
+  const changeRightMenuItem = (value) => {
+    setRightMenuItem(value);
+  }
 
   if (!user) {
     return <Redirect to='/auth' />
@@ -82,10 +90,12 @@ const Profile = () => {
         </div>
 
         <div className="selectedMenu">
-          {rightMenuItems.length > 0 ? rightMenuItems?.map((item) => {
-            return <div className="selectedMenuItems">{item.name}</div>;
-          }) : isLoading ?
-            <CircularProgress style={{ padding: '30px' }} size="1em" /> : <div className='noResutls'>
+          {isLoading ? <div>Loading...</div> : rightMenuItems.length > 0 ? rightMenuItems?.map((item) => {
+            return <div key={item._id} onClick={() => changeRightMenuItem(item.name)} className={`selectedMenuItems ${item.name === rightMenuItem ? 'active' : ''}`}>
+              {item.name}
+            </div>;
+          }) :
+            <div className='noResutls'>
               No results
             </div>}
         </div>

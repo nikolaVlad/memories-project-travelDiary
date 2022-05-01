@@ -7,7 +7,7 @@ import Auth from './components/Auth/Auth';
 import PostDetails from './components/PostDetails/PostDetails';
 import UserPosts from './UserPosts/UserPosts';
 import { useDispatch } from 'react-redux';
-import { getFollowings } from './actions/users';
+import { getFollowers, getFollowings } from './actions/users';
 import Profile from './components/Profile';
 import { getPosts } from './actions/posts';
 
@@ -18,7 +18,7 @@ const onMountApp = (dispatch) => {
   console.log('-App mounted-');
   console.log('Get all following users.')
   dispatch(getFollowings());
-  dispatch(getPosts())
+  dispatch(getFollowers());
 }
 
 const App = () => {
@@ -27,7 +27,10 @@ const App = () => {
 
 
   useEffect(() => {
-    onMountApp(dispatch);
+    if (user) {
+      onMountApp(dispatch);
+    }
+    dispatch(getPosts())
   })
 
   return (
