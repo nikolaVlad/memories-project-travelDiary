@@ -116,14 +116,14 @@ export const changeFollow = async (req, res) => {
     followingUser.followers.push({ _id: user._id, name: user.name, email: user.email })
   } else {
     // Unfollow user
-    console.log('Unfollowers user.')
+    console.log('Unfollowed user.')
     // Pop from followings
     user.followings = user.followings.filter((user) => {
-      user._id !== String(followingUserId)
+      return String(user._id) !== String(followingUserId)
     });
-    // Pop from followers - on followings user
+
     followingUser.followers = followingUser.followers.filter((user) => {
-      user._id !== String(userId);
+      return String(user._id) !== String(userId);
     })
 
   }
