@@ -17,12 +17,9 @@ const Navbar = () => {
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
     dispatch({ type: actionType.RESET_USERS });
-
-    history.push('/auth');
-
-    setUser(null);
-
     localStorage.clear();
+    history.push('/auth');
+    setUser(null);
   };
 
   useEffect(() => {

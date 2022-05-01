@@ -8,6 +8,7 @@ import Form from '../Form/Form';
 import useStyles from './styles';
 import Pagination from '../Pagination/Pagination';
 import ChipInput from 'material-ui-chip-input';
+import { getFollowers, getFollowings } from '../../actions/users';
 
 
 
@@ -48,6 +49,11 @@ const Home = () => {
   const handleAddChip = (tag) => setTags([...tags, tag]);
 
   const handleDeleteChip = (chipToDelete) => setTags(tags.filter((tag) => tag !== chipToDelete));
+
+  useEffect(() => {
+    dispatch(getFollowers());
+    dispatch(getFollowings());
+  }, [])
 
 
   return (

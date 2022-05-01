@@ -22,16 +22,22 @@ const onMountApp = (dispatch) => {
 }
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem('profile'));
   const dispatch = useDispatch();
+
+  const getUser = () => {
+    console.log('desi se')
+    return JSON.parse(localStorage.getItem('profile')) || null;
+  }
 
 
   useEffect(() => {
-    if (user) {
+    if (getUser()) {
+      console.log('desu se 2');
       onMountApp(dispatch);
     }
     dispatch(getPosts())
-  })
+  }, [])
+
 
   return (
     <BrowserRouter>
@@ -42,7 +48,7 @@ const App = () => {
           <Route path="/posts" exact component={Home} />
           <Route path="/posts/search" exact component={Home} />
           <Route path="/posts/:id" exact component={PostDetails} />
-          <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
+          <Route path="/auth" exact component={() => (!getUser() ? <Auth /> : <Redirect to="/posts" />)} />
           <Route path="/posts/userPosts/:id" exact component={UserPosts} />
           <Route path="/profile" exact component={Profile} />
         </Switch>
