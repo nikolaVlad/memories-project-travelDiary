@@ -9,16 +9,18 @@ import Posts from '../Posts/Posts';
 import './styles.scss';
 
 const Profile = () => {
-  const { followings } = useSelector(state => state.users);
-  const { followers } = useSelector(state => state.users);
-  const { isLoading } = useSelector(state => state.users);
+  const { followings } = useSelector((state) => state.users);
+  const { followers } = useSelector((state) => state.users);
+  const { isLoading } = useSelector((state) => state.users);
+  const { avaliableCountries } = useSelector((state) => state.countries);
+
   const user = JSON.parse(localStorage.getItem('profile'));
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getFollowers());
     dispatch(getFollowings());
-  }, [])
+  }, []);
 
   const [menuIndex, setMenuIndex] = useState(0);
 
@@ -31,39 +33,65 @@ const Profile = () => {
     if (creator) {
       res = res.filter((post) => post.creator === creator);
     }
-
     return res;
-  }
+  };
 
   // #point: Ovo cu koristiti kasnije.
-  const filterFunctionWithPlace = (posts) => {
-    return posts;
-  }
+  const filterFunctionWithVisitedPlaces = (posts) => {
+    let res = posts;
+    const creator = user?.result?._id;
+    res = res.filter((post) => post.creator === creator);
+    if (selectedMenuItem) {
+      res = res.filter((post) => {
+        const parsedCountry = selectedMenuItem.name.slice(4, selectedMenuItem.length);
 
-  const menuItems = [{
-    name: 'Followings',
-    value: followings,
-    filterFunction: filterFunctionWithCreator
-  },
-  {
-    name: 'Followers',
-    value: followers,
-    filterFunction: filterFunctionWithCreator
-  },
-  {
-    name: 'Visited places',
-    value: []
-  },
-  {
-    name: 'Places to visit',
-    value: []
-  }
-  ]
+        return post.country.trim() === parsedCountry.trim();
+      });
+    }
+    return res;
+  };
 
+  const filterFunctionWithPlacesToVisit = (posts) => {
+    let res = posts;
+    const creator = user?.result?._id;
+    res = res.filter((post) => post.likes.includes(String(creator)));
+    if (selectedMenuItem) {
+      res = res.filter((post) => {
+        const parsedCountry = selectedMenuItem.name.slice(4, selectedMenuItem.length);
 
+        return post.country.trim() === parsedCountry.trim();
+      });
+    }
+    return res;
+  };
+
+  const menuItems = [
+    {
+      name: 'Followings',
+      value: followings,
+      filterFunction: filterFunctionWithCreator
+    },
+    {
+      name: 'Followers',
+      value: followers,
+      filterFunction: filterFunctionWithCreator
+    },
+    {
+      name: 'Visited places',
+      value: avaliableCountries,
+      filterFunction: filterFunctionWithVisitedPlaces,
+      index: 0
+    },
+    {
+      name: 'Places to visit',
+      value: avaliableCountries,
+      filterFunction: filterFunctionWithPlacesToVisit,
+      index: 1
+    }
+  ];
 
   if (!user) {
-    return <Redirect to='/auth' />
+    return <Redirect to="/auth" />;
   }
 
   return (
@@ -71,24 +99,44 @@ const Profile = () => {
       <div className="menu">
         <div className="items">
           {menuItems.map((item, index) => {
-            return (<div className={`item ${menuIndex === index ? 'active' : ''}`} onClick={() => {
-              setMenuIndex(index)
-              setSelectedMenuItem('');
-            }
-            }>{item.name} {isLoading && <CircularProgress size={'1rem'} />}</div>)
+            return (
+              <div
+                className={`item ${menuIndex === index ? 'active' : ''}`}
+                onClick={() => {
+                  setMenuIndex(index);
+                  setSelectedMenuItem('');
+                }}
+              >
+                {item.name} {isLoading && <CircularProgress size={'1rem'} />}
+              </div>
+            );
           })}
         </div>
-        <div className='selectedMenu'>
-          <div className='selectedMenuItems'>
-            {isLoading ? 'loading...' : menuItems[menuIndex].value.length < 1 ? <div className='noResults'>No results</div> : menuItems[menuIndex].value.map((item) => {
-              return <div onClick={() => setSelectedMenuItem(item)} className={`selectedMenuItem ${item === selectedMenuItem ? 'active' : ''}`}>{item.name}</div>
-            })}
+        <div className="selectedMenu">
+          <div className="selectedMenuItems">
+            {isLoading ? (
+              'loading...'
+            ) : menuItems[menuIndex].value.length < 1 ? (
+              <div className="noResults">No results</div>
+            ) : (
+              menuItems[menuIndex].value.map((item) => {
+                return (
+                  <div onClick={() => setSelectedMenuItem(item)} className={`selectedMenuItem ${item === selectedMenuItem ? 'active' : ''}`}>
+                    {item.name}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
         <div>{selectedMenuItem.cretor}</div>
       </div>
       <div className="posts">
-        <Posts filterFunction={menuItems[menuIndex].filterFunction} />
+        <Posts
+          index={menuItems[menuIndex].index}
+          filterByUserFunction={menuItems[menuIndex].filterByUserFunction}
+          filterFunction={menuItems[menuIndex].filterFunction}
+        />
       </div>
     </div>
   );

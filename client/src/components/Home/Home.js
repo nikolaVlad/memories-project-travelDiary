@@ -9,8 +9,8 @@ import useStyles from './styles';
 import Pagination from '../Pagination/Pagination';
 import ChipInput from 'material-ui-chip-input';
 import { getFollowers, getFollowings } from '../../actions/users';
-
-
+import { getCountries } from '../../actions/countries';
+import { useSelector } from 'react-redux';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -30,7 +30,6 @@ const Home = () => {
   const history = useHistory();
 
   const searchPost = () => {
-
     if (search.trim() || tags || (categorySearch && categorySearch !== 'All')) {
       dispatch(getPostsBySearch({ search, tags: tags.join(','), category: categorySearch }));
       history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}&category=${categorySearch}`);
@@ -45,7 +44,6 @@ const Home = () => {
     }
   };
 
-
   const handleAddChip = (tag) => setTags([...tags, tag]);
 
   const handleDeleteChip = (chipToDelete) => setTags(tags.filter((tag) => tag !== chipToDelete));
@@ -53,8 +51,8 @@ const Home = () => {
   useEffect(() => {
     dispatch(getFollowers());
     dispatch(getFollowings());
-  }, [])
-
+    dispatch(getCountries());
+  }, []);
 
   return (
     <Grow in>
@@ -83,9 +81,6 @@ const Home = () => {
                 label="Search Tags"
                 variant="outlined"
               />
-
-
-
 
               {/* Search by category */}
               <TextField

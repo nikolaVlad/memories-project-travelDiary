@@ -10,34 +10,31 @@ import { useDispatch } from 'react-redux';
 import { getFollowers, getFollowings } from './actions/users';
 import Profile from './components/Profile';
 import { getPosts } from './actions/posts';
-
-
-
+import { getCountries } from './actions/countries';
 
 const onMountApp = (dispatch) => {
   console.log('-App mounted-');
-  console.log('Get all following users.')
+  console.log('Get all following users.');
   dispatch(getFollowings());
   dispatch(getFollowers());
-}
+  dispatch(getCountries());
+};
 
 const App = () => {
   const dispatch = useDispatch();
 
   const getUser = () => {
-    console.log('desi se')
+    console.log('desi se');
     return JSON.parse(localStorage.getItem('profile')) || null;
-  }
-
+  };
 
   useEffect(() => {
     if (getUser()) {
       console.log('desu se 2');
       onMountApp(dispatch);
     }
-    dispatch(getPosts())
-  }, [])
-
+    dispatch(getPosts());
+  }, []);
 
   return (
     <BrowserRouter>

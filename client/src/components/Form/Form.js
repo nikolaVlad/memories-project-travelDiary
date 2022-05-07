@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
-import { TextField, Button, Typography, Paper, MenuItem } from '@material-ui/core';
+import { TextField, Button, Typography, Paper, MenuItem, Select } from '@material-ui/core';
 import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPost, updatePost } from '../../actions/posts';
 import { useHistory } from 'react-router-dom';
+import { Autocomplete } from '@material-ui/lab';
 
 const Form = ({ currentId, setCurrentId }) => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -15,9 +16,12 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: '',
     description: '',
     selectedFile: '',
-    category : ''
+    category: '',
+    country: ''
   });
   const post = useSelector((state) => (currentId ? state.posts.posts.find((p) => p._id === currentId) : null));
+
+  const { countries } = useSelector((state) => state.countries);
 
   const dispatch = useDispatch();
 
@@ -31,9 +35,9 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId) {
-      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name}));
+      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
     } else {
-      dispatch(createPost({ ...postData, name: user?.result?.name}, history));
+      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
     }
     clear();
   };
@@ -44,7 +48,8 @@ const Form = ({ currentId, setCurrentId }) => {
       tags: '',
       description: '',
       selectedFile: '',
-      category : ''
+      category: '',
+      country: ''
     });
   };
 
@@ -55,7 +60,7 @@ const Form = ({ currentId, setCurrentId }) => {
           Please sign in to create your own memories and like other's memmories.
         </Typography>
       </Paper>
-    )
+    );
   }
 
   return (
@@ -64,14 +69,14 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
 
         <TextField
-          value = {postData.category || ''}
+          value={postData.category || ''}
           labelId="label"
           id="select"
           variant="outlined"
           label="Category"
           fullWidth
           select
-          onChange={(e) => setPostData({...postData, category : e.target.value})}
+          onChange={(e) => setPostData({ ...postData, category: e.target.value })}
         >
           <MenuItem value="Historical places">Historical places</MenuItem>
           <MenuItem value="Food">Food</MenuItem>
@@ -102,9 +107,38 @@ const Form = ({ currentId, setCurrentId }) => {
           value={postData.tags}
           onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })}
         />
+        <TextField
+          select
+          variant="outlined"
+          fullWidth
+          name="Country"
+          label="Country"
+          value={postData.country}
+          onChange={(e) => setPostData({ ...postData, country: e.target.value })}
+        >
+          {/* #point : Ovaj menu-item ce mi sluzi kao placeholder za svaku drzavu */}
+          {countries.length > 0 ? (
+            countries.map((country) => (
+              <MenuItem key={country.name} value={country.name}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ paddingLeft: '20px' }}>{country.name}</div>
+                  <div style={{ position: 'absolute', left: '8px' }}>{country.flag}</div>
+                </div>
+              </MenuItem>
+            ))
+          ) : (
+            <span>Loading countries...</span>
+          )}
+        </TextField>
+
         <div className={classes.fileInput}>
-          <FileBase type="file" multiple={false} onDone={({ base64 }) => {setPostData({ ...postData, selectedFile: base64 })
-        }} />
+          <FileBase
+            type="file"
+            multiple={false}
+            onDone={({ base64 }) => {
+              setPostData({ ...postData, selectedFile: base64 });
+            }}
+          />
         </div>
         <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>
           Submit

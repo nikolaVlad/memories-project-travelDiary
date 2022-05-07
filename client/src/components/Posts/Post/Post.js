@@ -11,7 +11,6 @@ import { useHistory } from 'react-router-dom';
 import { likePost, deletePost } from '../../../actions/posts';
 import useStyles from './styles';
 
-
 const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -53,14 +52,19 @@ const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing })
           image={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'}
           title={post.title}
         >
-          {user && user.result._id !== post.creator &&
-            <Typography style={{ background: `${isFollowing ? '' : 'gray'}` }} variant="body2" className={classes.followButton} onClick={(e) => {
-              e.stopPropagation()
-              onChangeFollow()
-            }}>
+          {user && user.result._id !== post.creator && (
+            <Typography
+              style={{ background: `${isFollowing ? '' : 'gray'}` }}
+              variant="body2"
+              className={classes.followButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                onChangeFollow();
+              }}
+            >
               {isFollowing ? ' Unfollow' : '+ Follow'}
             </Typography>
-          }
+          )}
         </CardMedia>
 
         <div className={classes.overlay}>
@@ -71,10 +75,8 @@ const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing })
           <div className={classes.overlay2} name="edit">
             <Button
               onClick={(e) => {
-
                 e.stopPropagation();
                 setCurrentId(post._id);
-
               }}
               style={{ color: 'white' }}
               size="small"
@@ -84,7 +86,7 @@ const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing })
           </div>
         )}
 
-        <Typography className={classes.title} variant="h6"  >
+        <Typography className={classes.title} variant="h6">
           {post.category}
         </Typography>
 
@@ -102,20 +104,21 @@ const Post = ({ post, setCurrentId, noActionsVar, onChangeFollow, isFollowing })
           </Typography>
         </CardContent>
       </ButtonBase>
-      {
-        !noActionsVar &&
+      {!noActionsVar && (
         <CardActions className={classes.cardActions}>
-          <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
-            <Likes />
-          </Button>
-          {(user?.result?._id === post?.creator) && (
+          {user?.result?._id !== post.creator && (
+            <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+              <Likes />
+            </Button>
+          )}
+          {user?.result?._id === post?.creator && (
             <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
               <DeleteIcon fontSize="small" /> &nbsp; Delete
             </Button>
           )}
         </CardActions>
-      }
-    </Card >
+      )}
+    </Card>
   );
 };
 
