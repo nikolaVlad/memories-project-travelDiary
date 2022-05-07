@@ -15,7 +15,8 @@ const postSchema = mongoose.Schema({
     type: Date,
     default: new Date(),
   },
-  category : String
+  category : String,
+  country: String
 });
 
 const post = mongoose.model("Post", postSchema);
