@@ -38,9 +38,9 @@ const Profile = () => {
 
   // #point: Ovo cu koristiti kasnije.
   const filterFunctionWithVisitedPlaces = (posts) => {
-    let res = posts;
+    let res = posts || [];
     const creator = user?.result?._id;
-    res = res.filter((post) => post.creator === creator);
+    res = res.filter((post) => post.creator === creator) || [];
     if (selectedMenuItem) {
       res = res.filter((post) => {
         const parsedCountry = selectedMenuItem.name.slice(4, selectedMenuItem.length);

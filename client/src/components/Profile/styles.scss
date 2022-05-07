@@ -77,5 +77,17 @@
   .posts {
     width: 100%;
     margin-left: 40px;
+    div {
+      @keyframes example {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      animation-name: example;
+      animation-duration: 0.4s;
+    }
   }
 }
