@@ -3,10 +3,20 @@ import mongoose from "mongoose";
 
 export const getPosts = async (req, res) => {
   const { page } = req.query;
-  console.log(page);
+  
 
   try {
-    const LIMIT = 8;
+    let LIMIT;
+    if(page === 'undefined')
+    {
+     LIMIT =1000;
+    }
+    else
+    {
+      LIMIT = 8;
+    }
+   
+    console.log({LIMIT});
     const startIndex = (Number(page) - 1) * LIMIT;
     const total = await Post.countDocuments({});
     const posts = await Post.find()
@@ -14,6 +24,8 @@ export const getPosts = async (req, res) => {
       .limit(LIMIT)
       .skip(startIndex);
 
+    
+    
     res.status(200).json({
       data: posts,
       currentPage: Number(page),
