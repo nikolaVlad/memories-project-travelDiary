@@ -67,16 +67,6 @@ const Profile = () => {
 
   const menuItems = [
     {
-      name: 'Followings',
-      value: followings,
-      filterFunction: filterFunctionWithCreator
-    },
-    {
-      name: 'Followers',
-      value: followers,
-      filterFunction: filterFunctionWithCreator
-    },
-    {
       name: 'Visited places',
       value: avaliableCountries,
       filterFunction: filterFunctionWithVisitedPlaces,
@@ -87,6 +77,16 @@ const Profile = () => {
       value: avaliableCountries,
       filterFunction: filterFunctionWithPlacesToVisit,
       index: 1
+    },
+    {
+      name: 'Followers',
+      value: followers,
+      filterFunction: filterFunctionWithCreator
+    },
+    {
+      name: 'Followings',
+      value: followings,
+      filterFunction: filterFunctionWithCreator
     }
   ];
 
