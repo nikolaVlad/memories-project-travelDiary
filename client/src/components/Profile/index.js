@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { getPosts } from '../../actions/posts';
 import { getFollowers, getFollowings } from '../../actions/users';
 
 import Posts from '../Posts/Posts';
@@ -20,6 +21,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getFollowers());
     dispatch(getFollowings());
+    dispatch(getPosts(undefined))
   }, []);
 
   const [menuIndex, setMenuIndex] = useState(0);
@@ -39,13 +41,14 @@ const Profile = () => {
   // #point: Ovo cu koristiti kasnije.
   const filterFunctionWithVisitedPlaces = (posts) => {
     let res = posts || [];
+    
     const creator = user?.result?._id;
-    res = res.filter((post) => post.creator === creator) || [];
+    res = (res.length > 0 && res?.filter((post) => post.creator === creator)) || [];
     if (selectedMenuItem) {
       res = res.filter((post) => {
         const parsedCountry = selectedMenuItem.name.slice(4, selectedMenuItem.length);
 
-        return post.country.trim() === parsedCountry.trim();
+        return post.country?.trim() === parsedCountry.trim();
       });
     }
     return res;
@@ -54,12 +57,12 @@ const Profile = () => {
   const filterFunctionWithPlacesToVisit = (posts) => {
     let res = posts;
     const creator = user?.result?._id;
-    res = res.filter((post) => post.likes.includes(String(creator)));
+    res = res?.filter((post) => post.likes.includes(String(creator)));
     if (selectedMenuItem) {
       res = res.filter((post) => {
         const parsedCountry = selectedMenuItem.name.slice(4, selectedMenuItem.length);
 
-        return post.country.trim() === parsedCountry.trim();
+        return post.country?.trim() === parsedCountry.trim();
       });
     }
     return res;
