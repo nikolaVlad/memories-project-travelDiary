@@ -7,7 +7,8 @@ const userSchema = mongoose.Schema({
   id: { type: String },
   role: { type: String, enum: ['admin', 'member'], required: true },
   followings: { type: Array },
-  followers: { type: Array }
+  followers: { type: Array },
+  country: {type: String}
 });
 
 export default mongoose.model("User", userSchema);;
