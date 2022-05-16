@@ -13,6 +13,11 @@ const Navbar = () => {
   const location = useLocation();
   const history = useHistory();
   const classes = useStyles();
+  let country = user?.result?.country || '';
+  if (country) {
+    console.log(country.split(' ')[0]);
+    country = country.split(' ')[0];
+  }
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
@@ -41,11 +46,18 @@ const Navbar = () => {
         <Typography component={Link} to="/" className={classes.heading} variant="h3" align="center">
           TravelDiary
         </Typography>
+        <div style={{ marginLeft: '20px', fontSize: '30px', marginTop: '10px' }}>{country}</div>
       </div>
       <Toolbar className={classes.toolBar}>
         {user?.result ? (
           <div className={classes.profile}>
-            <Avatar style={{ cursor: 'pointer' }} onClick={() => history.push('/profile')} className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>
+            <Avatar
+              style={{ cursor: 'pointer' }}
+              onClick={() => history.push('/profile')}
+              className={classes.purple}
+              alt={user?.result.name}
+              src={user?.result.imageUrl}
+            >
               {user.result.name.charAt(0)}
             </Avatar>
             <Typography className={classes.userName} variant="h6">
