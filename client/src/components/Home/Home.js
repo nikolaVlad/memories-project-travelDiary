@@ -47,11 +47,17 @@ const Home = () => {
   const handleAddChip = (tag) => setTags([...tags, tag]);
 
   const handleDeleteChip = (chipToDelete) => setTags(tags.filter((tag) => tag !== chipToDelete));
+  const getUser = () => {
+    return JSON.parse(localStorage.getItem('profile')) || null;
+  };
 
   useEffect(() => {
-    dispatch(getFollowers());
-    dispatch(getFollowings());
-    dispatch(getCountries());
+    if (getUser()) {
+      dispatch(getFollowers());
+      dispatch(getFollowings());
+      dispatch(getCountries());
+    }
+
   }, []);
 
   return (

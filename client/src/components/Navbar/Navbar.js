@@ -6,6 +6,7 @@ import { AppBar, Avatar, Button, Typography, Toolbar } from '@material-ui/core';
 import useStyles from './styles';
 import * as actionType from '../../constants/actionTypes';
 import traveldiary from '../../images/traveldiary.png';
+import Edit from '@material-ui/icons/EditTwoTone';
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -27,6 +28,10 @@ const Navbar = () => {
     setUser(null);
   };
 
+  const onClickEdit = () => {
+    history.push('/editProfile');
+  };
+
   useEffect(() => {
     const token = user?.token;
 
@@ -36,11 +41,13 @@ const Navbar = () => {
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
 
+    setUser('');
     setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
+
       <div className={classes.brandContainer}>
         <img className={classes.image} src={traveldiary} alt="icon" height="60" />
         <Typography component={Link} to="/" className={classes.heading} variant="h3" align="center">
@@ -60,6 +67,11 @@ const Navbar = () => {
             >
               {user.result.name.charAt(0)}
             </Avatar>
+            {location.pathname === '/profile' && (
+              <div style={{ cursor: 'pointer', marginLeft: '-70px', color: 'blue', display: 'flex', alignItems: 'center' }}>
+                <Edit onClick={() => onClickEdit()} />
+              </div>
+            )}
             <Typography className={classes.userName} variant="h6">
               {user.result.name}
             </Typography>

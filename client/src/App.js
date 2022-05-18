@@ -11,6 +11,7 @@ import { getFollowers, getFollowings } from './actions/users';
 import Profile from './components/Profile';
 import { getPosts } from './actions/posts';
 import { getCountries } from './actions/countries';
+import EditProfile from './components/Profile/Edit';
 
 const onMountApp = (dispatch) => {
   console.log('-App mounted-');
@@ -24,13 +25,11 @@ const App = () => {
   const dispatch = useDispatch();
 
   const getUser = () => {
-    console.log('desi se');
     return JSON.parse(localStorage.getItem('profile')) || null;
   };
 
   useEffect(() => {
     if (getUser()) {
-      console.log('desu se 2');
       onMountApp(dispatch);
     }
     dispatch(getPosts());
@@ -48,6 +47,7 @@ const App = () => {
           <Route path="/auth" exact component={() => (!getUser() ? <Auth /> : <Redirect to="/posts" />)} />
           <Route path="/posts/userPosts/:id" exact component={UserPosts} />
           <Route path="/profile" exact component={Profile} />
+          <Route path="/editProfile" exact component={EditProfile} />
         </Switch>
       </Container>
     </BrowserRouter>
