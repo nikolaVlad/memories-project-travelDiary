@@ -139,3 +139,22 @@ export const changeFollow = async (req, res) => {
 
   res.status(200).send(updatedUser);
 }
+
+export const editProfile = async (req, res) => {
+  console.log({ pristigao: true })
+  const { userId } = req;
+  const { firstName, lastName, country, password, email } = req.body;
+  console.log({ firstName, lastName });
+  const data = {
+    name: `${firstName} ${lastName}`,
+    country,
+    email
+  }
+  if (password) {
+    data.password = await bcrypt.hash(password, 12);
+  }
+  const updatedUser = await User.findByIdAndUpdate(userId, data, { new: true });
+  console.log(updatedUser);
+
+  res.status(200).send(updatedUser);
+}
