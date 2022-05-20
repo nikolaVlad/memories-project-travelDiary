@@ -29,6 +29,8 @@ const Profile = () => {
   // Right menu items
   const [selectedMenuItem, setSelectedMenuItem] = useState('');
 
+  const [currentId, setCurrentId] = useState(0);
+
   const filterFunctionWithCreator = (posts) => {
     let res = posts;
     const creator = selectedMenuItem._id;
@@ -136,6 +138,7 @@ const Profile = () => {
       </div>
       <div className="posts">
         <Posts
+          setCurrentId={setCurrentId}
           index={menuItems[menuIndex].index}
           filterByUserFunction={menuItems[menuIndex].filterByUserFunction}
           filterFunction={menuItems[menuIndex].filterFunction}
