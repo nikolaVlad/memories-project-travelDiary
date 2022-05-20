@@ -8,7 +8,6 @@ import { getPost, getPostsBySearch } from '../../actions/posts';
 import useStyles from './styles';
 import { NavLink } from 'react-router-dom';
 
-
 import CommentsForm from '../Comments/CommentsForm';
 
 const Post = () => {
@@ -35,7 +34,7 @@ const Post = () => {
 
   return (
     <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={7}>
-      <div className={classes.card} >
+      <div className={classes.card}>
         <div className={classes.section}>
           <Typography variant="h3" component="h2">
             {post.title}
@@ -49,23 +48,34 @@ const Post = () => {
           <Typography gutterBottom variant="body1" component="p">
             {post.description}
           </Typography>
-          <Typography variant="h6">Created by: <NavLink style = {{textDecoration : 'none', color : 'blue'}} to = { `/posts/userPosts/${post.creator}`}> {post.name} </NavLink></Typography>
+          <Typography variant="h6">
+            Created by:{' '}
+            <NavLink style={{ textDecoration: 'none', color: 'blue' }} to={`/posts/userPosts/${post.creator}`}>
+              {' '}
+              {post.name}{' '}
+            </NavLink>
+          </Typography>
           <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
           <Divider style={{ margin: '20px 0' }} />
-          
         </div>
+        {/* #point */}
         <div className={classes.imageSection}>
-          <img
-            className={classes.media}
-            src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'}
-            alt={post.title}
-          />
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {post?.selectedFile.map((image) => {
+              return (
+                <img
+                  className={classes.media}
+                  src={image || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'}
+                  alt={post.title}
+                />
+              );
+            })}
+          </div>
 
           <Typography variant="body1">
             <CommentsForm postId={id} />
           </Typography>
         </div>
-       
       </div>
     </Paper>
   );

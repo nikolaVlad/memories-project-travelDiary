@@ -25,6 +25,8 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const dispatch = useDispatch();
 
+  const [uploading, setUploading] = useState(false);
+
   useEffect(() => {
     if (post) {
       setPostData(post);
@@ -47,7 +49,7 @@ const Form = ({ currentId, setCurrentId }) => {
       title: '',
       tags: '',
       description: '',
-      selectedFile: '',
+      selectedFile: [],
       category: '',
       country: ''
     });
@@ -134,13 +136,26 @@ const Form = ({ currentId, setCurrentId }) => {
         <div className={classes.fileInput}>
           <FileBase
             type="file"
-            multiple={false}
-            onDone={({ base64 }) => {
-              setPostData({ ...postData, selectedFile: base64 });
+            multiple={true}
+            onDone={(images) => {
+              setUploading(true);
+
+              let imagesArray = images.map((image) => {
+                return image.base64;
+              })
+              if (imagesArray.length > 6) {
+                imagesArray = imagesArray.splice(0, 6);
+              }
+
+              setPostData({ ...postData, selectedFile: imagesArray });
+              setUploading(false);
+
+
+
             }}
           />
         </div>
-        <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>
+        <Button disabled={uploading} className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>
           Submit
         </Button>
         <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>
