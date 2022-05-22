@@ -32,7 +32,7 @@ const EditProfile = () => {
     const result = data.data;
     const oldResult = JSON.parse(localStorage.getItem('profile'));
     const oldResultKey = oldResult.result;
-    const newResultKey = { ...oldResultKey, name: result.name, country: result.country, };
+    const newResultKey = { ...oldResultKey, name: result.name, country: result.country, email: result.email };
     const newResult = {
       result: newResultKey
     }
