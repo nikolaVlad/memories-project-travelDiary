@@ -34,7 +34,7 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, confirmPassword, firstName, lastName, country } = req.body;
+  const { email, password, confirmPassword, firstName, lastName, country, imageUrl } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -53,7 +53,8 @@ export const signup = async (req, res) => {
       role: 'member',
       followings: [],
       followers: [],
-      country
+      country,
+      imageUrl
     });
 
     const token = jwt.sign({ email: result.email, id: result._id }, "test", {
@@ -144,12 +145,13 @@ export const changeFollow = async (req, res) => {
 export const editProfile = async (req, res) => {
   console.log({ pristigao: true })
   const { userId } = req;
-  const { firstName, lastName, country, password, email } = req.body;
+  const { firstName, lastName, country, password, email, imageUrl } = req.body;
   console.log({ firstName, lastName });
   const data = {
     name: `${firstName} ${lastName}`,
     country,
-    email
+    email,
+    imageUrl
   }
   if (password) {
     data.password = await bcrypt.hash(password, 12);
