@@ -63,7 +63,7 @@ const Navbar = () => {
               onClick={() => history.push('/profile')}
               className={classes.purple}
               alt={user?.result.name}
-              src={location.pathname === '/profile' && user?.result.imageUrl}
+              src={user?.result?.imageUrl}
             >
               <span >{user.result.name.charAt(0)}</span>
             </Avatar>

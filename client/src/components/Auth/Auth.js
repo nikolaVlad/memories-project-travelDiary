@@ -8,6 +8,8 @@ import Input from './Input';
 import { signin, signup } from '../../actions/auth';
 import { getFollowers, getFollowings } from '../../actions/users';
 import { useSelector } from 'react-redux';
+import FileBase from 'react-file-base64';
+
 
 const initialState = {
   firstName: '',
@@ -15,7 +17,8 @@ const initialState = {
   country: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  imageUrl: ''
 };
 const Auth = () => {
   const [showPassowrd, setShowPassword] = useState(false);
@@ -79,6 +82,7 @@ const Auth = () => {
                       );
                     })}
                 </TextField>
+
               </React.Fragment>
             )}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
@@ -89,7 +93,17 @@ const Auth = () => {
               handleShowPassword={handleShowPassword}
               type={showPassowrd ? 'text' : 'password'}
             />
-            {isSignUp && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type={'password'} />}
+            {isSignUp &&
+              <div style={{ marginLeft: '10px', width: '100%' }}>
+                <Input style={{ marginLeft: '0px' }} name="confirmPassword" label="Repeat Password" handleChange={handleChange} type={'password'} />
+                <br />
+                <FileBase type="file"
+                  multiple={false}
+                  onDone={({ base64 }) => {
+                    setFormData({ ...formData, imageUrl: base64 })
+
+                  }} />
+              </div>}
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             {isSignUp ? 'Sign Up' : 'Sign In'}

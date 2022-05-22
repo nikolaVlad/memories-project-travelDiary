@@ -16,7 +16,6 @@ export const getCountries = () => async (dispatch) => {
     if (a.name > b.name) return 1;
     return 0;
   });
-
   dispatch({ type: FETCH_COUNTRIES, payload: { data: res } });
 };
 

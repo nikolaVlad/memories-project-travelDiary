@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import './styles.scss';
 import { useHistory } from 'react-router-dom';
 import * as api from '../../../api'
+import FileBase from 'react-file-base64';
+
 
 const EditProfile = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -14,7 +16,8 @@ const EditProfile = () => {
     lastName: user?.result?.name?.split(' ')[1],
     country: user?.result?.country,
     email: user?.result?.email,
-    password: ''
+    password: '',
+    imageUrl: ''
   };
   const [formData, setFormData] = useState(initialState);
   const { countries } = useSelector((state) => state.countries);
@@ -32,7 +35,7 @@ const EditProfile = () => {
     const result = data.data;
     const oldResult = JSON.parse(localStorage.getItem('profile'));
     const oldResultKey = oldResult.result;
-    const newResultKey = { ...oldResultKey, name: result.name, country: result.country, email: result.email };
+    const newResultKey = { ...oldResultKey, name: result.name, country: result.country, email: result.email, imageUrl: result.imageUrl };
     const newResult = {
       result: newResultKey
     }
@@ -84,6 +87,17 @@ const EditProfile = () => {
             <Typography>New password</Typography>
             <input name="password" onChange={handleChange} type="password" value={formData.password} />
           </div>
+          <div style={{ backgroundColor: 'transparent' }} className="row" >
+            <Typography>Profile picture:</Typography>
+            <div className='file'>
+              <FileBase type="file"
+                multiple={false}
+                onDone={({ base64 }) => {
+                  setFormData({ ...formData, imageUrl: base64 })
+                }} />
+            </div>
+
+          </div>
           <div className="actions">
             <Button onClick={handleSubmit} style={{ marginRight: '8px', width: '12%' }} color="primary" size="small" variant="contained">
               Save
@@ -94,7 +108,7 @@ const EditProfile = () => {
           </div>
         </Paper>
       </Container>
-    </div>
+    </div >
   );
 };
 

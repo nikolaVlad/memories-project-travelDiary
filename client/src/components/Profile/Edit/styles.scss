@@ -15,6 +15,11 @@
 }
 
 .row {
+  .file {
+    * {
+      background-color: transparent !important;
+    }
+  }
   display: flex;
   justify-content: space-between;
   margin: 20px 0px;

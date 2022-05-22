@@ -18,7 +18,7 @@ const onMountApp = (dispatch) => {
   console.log('Get all following users.');
   dispatch(getFollowings());
   dispatch(getFollowers());
-  dispatch(getCountries());
+
 };
 
 const App = () => {
@@ -32,6 +32,7 @@ const App = () => {
     if (getUser()) {
       onMountApp(dispatch);
     }
+    dispatch(getCountries());
     dispatch(getPosts());
   }, []);
 

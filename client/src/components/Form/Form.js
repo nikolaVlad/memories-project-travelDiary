@@ -118,7 +118,6 @@ const Form = ({ currentId, setCurrentId }) => {
           value={postData.country}
           onChange={(e) => setPostData({ ...postData, country: e.target.value })}
         >
-          {/* #point : Ovaj menu-item ce mi sluzi kao placeholder za svaku drzavu */}
           {countries.length > 0 ? (
             countries.map((country) => (
               <MenuItem key={country.name} value={country.name}>
@@ -149,8 +148,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
               setPostData({ ...postData, selectedFile: imagesArray });
               setUploading(false);
-
-
 
             }}
           />
