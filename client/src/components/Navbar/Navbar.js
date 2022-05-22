@@ -59,19 +59,17 @@ const Navbar = () => {
         {user?.result ? (
           <div className={classes.profile}>
             <Avatar
-              style={{ cursor: 'pointer'}}
-              onClick={() => location.pathname === '/profile' ? onClickEdit() : history.push('/profile')}
+              style={{ cursor: 'pointer' }}
+              onClick={() => history.push('/profile')}
               className={classes.purple}
               alt={user?.result.name}
-              src={ location.pathname === '/profile' && user?.result.imageUrl}
+              src={location.pathname === '/profile' && user?.result.imageUrl}
             >
-              {location.pathname === '/profile' ? (
-                <Edit />
-            ) : <span >{user.result.name.charAt(0)}</span> }
+              <span >{user.result.name.charAt(0)}</span>
             </Avatar>
-            
-            <Typography className={classes.userName} variant="h6">
-              {user.result.name}
+
+            <Typography className={classes.userName} onClick={() => onClickEdit()} variant="h6">
+              {user.result.name} <Edit />
             </Typography>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>
               Logout
