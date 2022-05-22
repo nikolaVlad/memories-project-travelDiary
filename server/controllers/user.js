@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
+import Post from "../models/post.js";
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -154,7 +155,19 @@ export const editProfile = async (req, res) => {
     data.password = await bcrypt.hash(password, 12);
   }
   const updatedUser = await User.findByIdAndUpdate(userId, data, { new: true });
-  console.log(updatedUser);
+
+  const newName = updatedUser.name;
+  // Treba se promeniti svaki post gde je userId === post.creator
+  const updatedPost = await Post.updateMany(
+    {
+      creator: userId
+    },
+    {
+      name: newName
+    }
+    , { new: true });
+  console.log("ovde");
+  console.log(updatedPost);
 
   res.status(200).send(updatedUser);
 }
